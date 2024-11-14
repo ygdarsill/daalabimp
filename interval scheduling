@@ -1,0 +1,51 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+// Structure to represent an interval
+struct Interval {
+    int start;
+    int end;
+};
+
+// Comparison function to sort intervals by their end times
+bool compareEndTime(Interval a, Interval b) {
+    return a.end < b.end;
+}
+
+// Function to perform interval scheduling
+vector<Interval> intervalScheduling(vector<Interval>& intervals) {
+    // Sort intervals by their end time
+    sort(intervals.begin(), intervals.end(), compareEndTime);
+    
+    vector<Interval> selectedIntervals;
+    int lastEndTime = -1;  // Keeps track of the end time of the last selected interval
+    
+    for (const auto& interval : intervals) {
+        // If the current interval starts after or when the last selected interval ends
+        if (interval.start >= lastEndTime) {
+            selectedIntervals.push_back(interval);  // Select the interval
+            lastEndTime = interval.end;  // Update the last end time
+        }
+    }
+    
+    return selectedIntervals;
+}
+
+int main() {
+    // Define a set of intervals
+    vector<Interval> intervals = {{1, 3}, {2, 5}, {4, 7}, {6, 8}, {5, 9}};
+    
+    // Get the selected intervals using the greedy approach
+    vector<Interval> result = intervalScheduling(intervals);
+    
+    // Output the result
+    cout << "Selected intervals:" << endl;
+    for (const auto& interval : result) {
+        cout << "[" << interval.start << ", " << interval.end << "]" << endl;
+    }
+    
+    return 0;
+}
